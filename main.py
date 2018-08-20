@@ -1,9 +1,10 @@
-import pygame
-import time
+import pygame,time
+
 from factory import Factory
 from figure import Figure
 
 pygame.init()
+
 rocket_up_img = pygame.image.load("rocket_ship_up.png")
 rocket_right_img = pygame.image.load("rocket_ship_right.png")
 rocket_down_img = pygame.image.load("rocket_ship_down.png")
@@ -60,7 +61,7 @@ def message_display(text, highscore, score):
         highscore = score
     game_loop(spawn_counter, highscore, clock)
 
-def rocket_ship(x, y, x_change, y_change, before):
+def rocket_ship_blit(x, y, x_change, y_change, before):
     if y_change == 0 and x_change == 0:
         gameDisplay.blit(before, (x - 25, y - 23))
         return before
@@ -78,7 +79,7 @@ def rocket_ship(x, y, x_change, y_change, before):
         return rocket_right_img
 
 
-def enemy(x, y, kind):
+def enemy_blit(x, y, kind):
     if kind == "A":
         img = enemyA_img
         gameDisplay.blit(img, (x - 13, y - 13))
@@ -91,13 +92,6 @@ def enemy(x, y, kind):
 
 def blit_comet(x, y):
     gameDisplay.blit(comet_img, (x - 13, y - 13))
-
-
-"""def update_figure(figure):
-    pygame.draw.rect(gameDisplay, black, (figure.x, figure.y, figure_width, figure_height))
-
-def update_enemy(x_enemy,y_enemy):
-    pygame.draw.rect(gameDisplay, red, (x_enemy, y_enemy, 30, 30))"""
 
 
 def game_loop(spawn_counter, highscore, clock):
@@ -128,7 +122,7 @@ def game_loop(spawn_counter, highscore, clock):
                 y_change = 0
 
         gameDisplay.fill(black)
-        before = rocket_ship(figure.x, figure.y, x_change, y_change, before)
+        before = rocket_ship_blit(figure.x, figure.y, x_change, y_change, before)
         pygame.display.update()
 
         spawn_counter -= 1
@@ -163,8 +157,8 @@ def game_loop(spawn_counter, highscore, clock):
             if not foe.move():
                 enemies.remove(foe)
                 continue
-            #update_enemy(foe.x, foe.y)
-            enemy(foe.x, foe.y, foe.get_kind())
+
+            enemy_blit(foe.x, foe.y, foe.get_kind())
             if pygame.Rect.colliderect(
                     pygame.Rect(figure.x, figure.y, figure_width, figure_height),
                     pygame.Rect(foe.x, foe.y, enemy_width, enemy_height)):
